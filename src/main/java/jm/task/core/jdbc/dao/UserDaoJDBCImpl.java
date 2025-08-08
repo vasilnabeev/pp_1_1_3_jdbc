@@ -3,6 +3,7 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -42,24 +43,31 @@ public class UserDaoJDBCImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        String saveUser = "INSERT INTO users (name, lastName, age) VALUES ('" +
-                name + "', '" + lastName + "', " + age + ")";
+        String saveUser = "INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)";
         try {
-            Statement statement = Util.getConnection().createStatement();
-            statement.execute(saveUser);
+            PreparedStatement statement = Util.getConnection().prepareStatement(saveUser);
+            statement.setString(1, name);
+            statement.setString(2, lastName);
+            statement.setByte(3, age);
+            statement.executeUpdate();
+            //Statement statement = Util.getConnection().createStatement();
+            //statement.execute(saveUser);
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка при сохранении пользователя", e);
+
         }
     }
 
     @Override
     public void removeUserById(long id) {
-        String removeUser = "DELETE FROM users WHERE id = " + id;
+        String removeUser = "DELETE FROM users WHERE id = ?";
         try {
-            Statement statement = Util.getConnection().createStatement();
-            statement.execute(removeUser);
+            PreparedStatement statement = Util.getConnection().prepareStatement(removeUser);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            //Statement statement = Util.getConnection().createStatement();
+            //statement.execute(removeUser);
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка при удалении пользователя", e);
+
         }
     }
 
@@ -80,7 +88,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 users.add(user);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка при получении списка пользователей", e);
+
         }
         return users;
     }
@@ -92,7 +100,7 @@ public class UserDaoJDBCImpl implements UserDao {
             Statement statement = Util.getConnection().createStatement();
             statement.execute(query);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+
         }
     }
 }
