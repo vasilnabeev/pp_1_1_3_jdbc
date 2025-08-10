@@ -50,8 +50,6 @@ public class UserDaoJDBCImpl implements UserDao {
             statement.setString(2, lastName);
             statement.setByte(3, age);
             statement.executeUpdate();
-            //Statement statement = Util.getConnection().createStatement();
-            //statement.execute(saveUser);
         } catch (SQLException e) {
 
         }
@@ -64,8 +62,6 @@ public class UserDaoJDBCImpl implements UserDao {
             PreparedStatement statement = Util.getConnection().prepareStatement(removeUser);
             statement.setLong(1, id);
             statement.executeUpdate();
-            //Statement statement = Util.getConnection().createStatement();
-            //statement.execute(removeUser);
         } catch (SQLException e) {
 
         }
